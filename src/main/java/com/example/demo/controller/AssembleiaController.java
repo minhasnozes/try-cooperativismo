@@ -20,6 +20,16 @@ public class AssembleiaController {
         return assembleiaRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity <Assembleia> findById (@PathVariable Integer id) {
+        Assembleia assembly = assemblyService.findById(id);
+
+        if (assembly != null) {
+            return ResponseEntity.ok(assembly);
+        } else {
+            throw new AssembleiaNotFoundException("The Assembly ID" + "has not found");
+        }
+    }
     @PostMapping
     public Assembleia createAssembleias(@RequestBody Assembleia assembleia) {
         return assembleiaRepository.save(assembleia);
