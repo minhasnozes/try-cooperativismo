@@ -33,7 +33,7 @@ public class AssociadoService {
 
             return this.save(associadoExists);
         } else {
-            throw new AssociadoNotFoundException("Associado com ID " + id + " não encontrado.");
+            throw new AssociadoNotFoundException("Associate with " + id + " has not found.");
         }
     }
 }
