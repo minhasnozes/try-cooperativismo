@@ -28,6 +28,19 @@ public class AssemblyService {
         return assemblyRepository.save(assembly);
     }
 
+    public Assembleia edit (Integer id, Assembleia assembleia) {
+        Assembleia assembleiaExists = this.findById(id);
+
+        if (assembleiaExists != null) {
+            assembleiaExists.setData(assembleia.getData());
+            assembleiaExists.setPauta(assembleia.getPauta());
+
+            return this.assemblyRepository.save(assembleiaExists);
+        } else {
+            throw new AssembleiaNotFoundException("The assembly" + id + "has not found.");
+        }
+
+    }
     public void delete(Integer id) {
         assemblyRepository.deleteById(id);}
     }
