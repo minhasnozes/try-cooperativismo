@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Associado;
 import com.example.demo.model.Sessao;
 import com.example.demo.repository.SessaoRepository;
+import com.example.demo.util.VotingSessionTimer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,9 @@ public class SessaoService {
 
     @Autowired
     private SessaoRepository sessaoRepository;
+
+    @Autowired
+    private VotingSessionTimer votingSessionTimer;
 
 
     @GetMapping
@@ -30,26 +34,7 @@ public class SessaoService {
         if (sessao.getDuracao() == null) {
             sessao.setDuracao(1);
         }
-
+        votingSessionTimer.startVotingSession(sessao, sessao.getDuracao() * 60000);
         return sessaoRepository.save(sessao);
-    }
-
-    public void atualizarVotosSessoesExpiradas() {
-        List<Sessao> sessoes = this.findAll();
-        sessoes.forEach(this::aplicarLogicaSessao);
-    }
-
-    private void aplicarLogicaSessao(Sessao sessao) {
-        if (sessao.getDataCriacao() == null) {
-            sessao.setVotos(false);
-            this.save(sessao);
-        } else {
-            LocalDateTime dataCriacaoMaisDuracao = sessao.getDataCriacao().plusMinutes(sessao.getDuracao());
-            if (LocalDateTime.now().isAfter(dataCriacaoMaisDuracao)) {
-                sessao.setVotos(false);
-                this.save(sessao);
-            }
-        }
-
     }
 }
