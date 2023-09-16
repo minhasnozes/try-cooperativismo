@@ -1,13 +1,10 @@
 package com.example.demo.util;
 
-import com.example.demo.model.Sessao;
-import com.example.demo.repository.SessaoRepository;
+import com.example.demo.model.Session;
+import com.example.demo.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -18,19 +15,19 @@ public class VotingSessionTimer {
     private ScheduledExecutorService executor;
 
     @Autowired
-    private SessaoRepository sessaoRepository;
+    private SessionRepository sessionRepository;
 
-    public void startVotingSession(Sessao sessao, long durationInMilliseconds) {
+    public void startVotingSession(Session session, long durationInMilliseconds) {
         executor = Executors.newSingleThreadScheduledExecutor();
         executor.schedule(() -> {
-            endVotingSession(sessao);
+            endVotingSession(session);
 
             executor.shutdown();
         }, durationInMilliseconds, TimeUnit.MILLISECONDS);
     }
 
-    private void endVotingSession(Sessao sessao) {
-        sessao.setVotos(false);
-        sessaoRepository.save(sessao);
+    private void endVotingSession(Session session) {
+        session.setOpen(false);
+        sessionRepository.save(session);
     }
 }

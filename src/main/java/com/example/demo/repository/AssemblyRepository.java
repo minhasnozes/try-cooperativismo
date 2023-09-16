@@ -1,8 +1,9 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.Associado;
+import com.example.demo.model.Assembly;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 @Repository
-public interface AssociadoRepository extends JpaRepository<Associado, Integer> {
+public interface AssemblyRepository extends JpaRepository<Assembly, Long> {
 }

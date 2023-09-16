@@ -1,10 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.exceptions.AssembleiaNotFoundException;
-import com.example.demo.model.Assembleia;
-import com.example.demo.repository.AssembleiaRepository;
+import com.example.demo.exceptions.AssemblyNotFoundException;
+import com.example.demo.model.Assembly;
+import com.example.demo.repository.AssemblyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 
@@ -12,36 +13,35 @@ import java.util.Optional;
 public class AssemblyService {
 
     @Autowired
-    private AssembleiaRepository assemblyRepository;
+    private AssemblyRepository assemblyRepository;
 
-    public Assembleia findById(Integer id) {
-        Optional<Assembleia> optionalAssembly = assemblyRepository.findById(id);
+    public Assembly findById(Long id) {
+        Optional<Assembly> optionalAssembly = assemblyRepository.findById(id);
 
         if (optionalAssembly.isPresent()) {
             return optionalAssembly.get();
         } else {
-            throw new AssembleiaNotFoundException("The Assembly with " + id + " has not found");
+            throw new AssemblyNotFoundException("The Assembly with " + id + " has not found");
         }
     }
 
-    public Assembleia save (Assembleia assembly) {
+    public Assembly save(Assembly assembly) {
         return assemblyRepository.save(assembly);
     }
+    public Assembly edit(Long id, Assembly assembly) {
+        Assembly assemblyExists = this.findById(id);
 
-    public Assembleia edit (Integer id, Assembleia assembleia) {
-        Assembleia assembleiaExists = this.findById(id);
-
-        if (assembleiaExists != null) {
-            assembleiaExists.setData(assembleia.getData());
-            assembleiaExists.setPauta(assembleia.getPauta());
-
-            return this.assemblyRepository.save(assembleiaExists);
+        if (assemblyExists != null) {
+            assemblyExists.setAgenda(assembly.getAgenda());
+            return this.assemblyRepository.save(assemblyExists);
         } else {
-            throw new AssembleiaNotFoundException("The assembly" + id + "has not found.");
+            throw new AssemblyNotFoundException("The assembly" + id + "has not found.");
         }
 
     }
-    public void delete(Integer id) {
-        assemblyRepository.deleteById(id);}
+
+    public void delete(Long id) {
+        assemblyRepository.deleteById(id);
     }
+}
 
